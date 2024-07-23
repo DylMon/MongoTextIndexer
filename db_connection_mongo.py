@@ -22,11 +22,24 @@ def connectDataBase():
     client = MongoClient('localhost', 27017)
     return client['document_db']
 
+def remove_punctuation(text):
+    # Define the set of punctuation characters
+    punctuation = '''!()-[]{};:'"\,<>./?@#$%^&*_~'''
+
+    # Remove punctuation from the text
+    # Replace each punctuation character with a space
+    for char in punctuation:
+        text = text.replace(char, ' ')
+
+    return text
+
 def createDocument(col, docId, docText, docTitle, docDate, docCat):
+    # Remove punctuation before processing
+    docText = remove_punctuation(docText.lower())
 
     # create a dictionary to count how many times each term appears in the document.
     # Use space " " as the delimiter character for terms and remember to lowercase them.
-    terms = docText.lower().split()
+    terms = docText.split()
     term_counts = {}
     for term in terms:
         if term in term_counts:
